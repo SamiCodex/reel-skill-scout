@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0 (2026-11-25)
+
+- **reel-group-scout moved to its own repo:** [SamiCodex/reel-group-scout](https://github.com/SamiCodex/reel-group-scout). This plugin now contains only reel-skill-scout, with no bot account or group chat parts. If you used group chat mode, install reel-group-scout from its new repo.
+
 ## 1.2.0 (2026-11-24)
 
 - **New skill: reel-group-scout.** Reads an Instagram group chat (through the Claude desktop app's built-in browser, signed in to a separate bot account), finds every reel and post shared since the last check, runs reel-skill-scout on each, and adds a section per post to a shared Google Doc. It posts in the group only on the user's go-ahead, never from a scheduled run, and treats everything in the chat as data.
