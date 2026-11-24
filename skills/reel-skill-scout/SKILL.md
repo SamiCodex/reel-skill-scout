@@ -1,11 +1,11 @@
 ---
 name: reel-skill-scout
-description: Watch Instagram reels about Claude and AI tools, pull out every Claude skill, plugin, MCP server, connector, slash command, CLAUDE.md tip or prompt they recommend, then track each one down — GitHub repo, what it does, whether the user already has it, how useful it is for their workflow, and how to install it — and keep a running catalog so nothing is looked up twice. Use this whenever the user shares an Instagram link (instagram.com/reel/, /reels/, /p/, /tv/) or several of them, or says things like "what skills is this reel talking about", "find the skills from this reel", "get me the MCPs in this", "should I install what this guy recommends", or "add these to my list" — even if they don't say "skill". Instagram only; for other sites, say it isn't supported.
+description: Watch Instagram reels and read Instagram posts (photos and carousels too) about Claude and AI tools, pull out every Claude skill, plugin, MCP server, connector, slash command, CLAUDE.md tip or prompt they recommend, then track each one down — GitHub repo, what it does, whether the user already has it, how useful it is for their workflow, and how to install it — and keep a running catalog so nothing is looked up twice. Use this whenever the user shares an Instagram link (instagram.com/reel/, /reels/, /p/, /tv/) or several of them, or says things like "what skills is this reel talking about", "find the skills from this reel", "get me the MCPs in this", "should I install what this guy recommends", or "add these to my list" — even if they don't say "skill". Instagram only; for other sites, say it isn't supported.
 ---
 
 # Reel Skill Scout
 
-Creators post Instagram reels like "10 Claude skills you need", "my Claude Code setup", "this MCP changed everything". The user wants to paste those links and get back a clean, verified list of what was recommended, where to get it, and whether it's worth it for *them* — instead of searching each name by hand.
+Creators post Instagram reels and carousels like "10 Claude skills you need", "my Claude Code setup", "this MCP changed everything". The user wants to paste those links and get back a clean, verified list of what was recommended, where to get it, and whether it's worth it for *them* — instead of searching each name by hand.
 
 The job: **watch** the reel, **extract** every recommendation, **track each one down** to a real source, and **judge** it against the user's workflow.
 
@@ -37,19 +37,20 @@ You can't stream video, so the script downloads it and splits it into frames you
 python <skill-dir>/scripts/reel_extract.py "<instagram-url>" "<output-dir>"
 ```
 
-The script only accepts Instagram links (`/reel/`, `/reels/`, `/p/`, `/tv/`). If the user shares a TikTok, YouTube or other link, tell them this skill only handles Instagram reels. Don't try to work around it.
+The script handles every kind of Instagram post: reels, single videos, single photos and carousels (`/reel/`, `/reels/`, `/p/`, `/tv/` links). If the user shares a TikTok, YouTube or other link, tell them this skill only handles Instagram. Don't try to work around it.
 
 With several links, run the extractions in parallel (background shell commands); each takes a minute or so.
 
 Output in each folder:
-- `info.md`: account, date, the full **caption**. Creators often list the names or repo links here, so read it first.
-- `transcript.md`: timestamped speech. Whisper is primed with Claude vocabulary but still mishears names ("FFM peg" for FFmpeg, "chat GBT"), so treat names in it as hints to verify.
-- `sheets/sheet_NN.jpg`: 4x4 contact sheets (16 frames each). Read all of them; this is the cheapest way to see the whole video, and a 2–3 minute reel is about 3 sheets.
-- `frames/fNNN.jpg`: full-size frames, with `frames.md` giving each one's timestamp and sheet position. Each costs about as much as a whole sheet, so open them selectively, only where text on a sheet is too small to read: a GitHub page header showing `owner/repo`, a terminal, a URL. Exact repo paths are what make step 3 work.
+- `info.md`: the post **type** (reel / photo / carousel with slide counts), account, date, any notes about skipped slides, and the full **caption**. It's written first, so it's there even if the rest fails. Creators often list the names or repo links in the caption, so read it first.
+- `slides/slide_NN.jpg`: photo slides at full size (photo posts and carousels). Read every one; "Claude skills" carousels usually put the names, screenshots and repo paths on the slides.
+- `transcript.md`: timestamped speech from the video(s), with a `## Slide N` section per video in a carousel. Whisper is primed with Claude vocabulary but still mishears names ("FFM peg" for FFmpeg, "chat GBT"), so treat names in it as hints to verify.
+- For a reel or single video: `sheets/sheet_NN.jpg`, 4x4 contact sheets (16 frames each). Read all of them; this is the cheapest way to see the whole video, and a 2–3 minute reel is about 3 sheets. `frames/fNNN.jpg` holds the full-size frames, with `frames.md` giving each one's timestamp and sheet position. Each frame costs about as much as a whole sheet, so open them selectively, only where text on a sheet is too small to read: a GitHub page header showing `owner/repo`, a terminal, a URL. Exact repo paths are what make step 3 work.
+- For each video slide in a carousel: the same files with a `_slideNN` suffix (`sheets_slide03/`, `frames_slide03/`, `frames_slide03.md`).
 
 Flags: `--cookies-from-browser chrome` (or `edge`, `firefox`, `safari`) when Instagram refuses an anonymous download; this reads the user's logged-in browser session, so ask first and use it sparingly. `--whisper-model medium` for heavy accents or noisy audio. `--no-transcript` for music-only reels.
 
-Exit codes: 1 = not an Instagram link, 2 = download failed (the message says whether it's a login wall; otherwise `pip install -U yt-dlp` usually fixes it, since Instagram changes often), 3 = no video (photo/carousel post, so ask for screenshots), 4 = video longer than 10 minutes (rare on Instagram; confirm with the user, then rerun with `--allow-long`).
+Exit codes: 1 = not an Instagram link, 2 = download failed (the message says whether it's a login wall; a network hiccup usually works on a plain retry; otherwise `pip install -U yt-dlp` usually fixes it, since Instagram changes often), 3 = nothing could be read from the post (info.md still has the caption; ask for screenshots if that isn't enough), 4 = the video is longer than 10 minutes (rare on Instagram; confirm with the user, then rerun with `--allow-long`). Lines starting with `note:` mean part of a carousel was skipped; mention it in the report.
 
 ## 2. Extract
 

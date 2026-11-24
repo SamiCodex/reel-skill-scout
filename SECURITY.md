@@ -18,6 +18,7 @@ The main risk is **untrusted content**. Anyone can post a reel or create a GitHu
 | Crafted repo names reaching other GitHub API endpoints (e.g. `../user`) | `check_repos.py` validates owner/repo against GitHub's naming rules and URL-encodes them. |
 | Non-Instagram or look-alike URLs (`instagram.com.evil.com`, `instagram.com@evil.com`) | `reel_extract.py` accepts only `https://(www.\|m.)instagram.com/…/reel\|reels\|p\|tv/…`. |
 | Overwriting the user's own files | `reel_extract.py` only writes into a new folder or one it created (marker file), and refuses anything else. |
+| Slide images from unexpected servers | Carousel/photo images are fetched only over HTTPS from Instagram's own CDNs (`*.cdninstagram.com`, `*.fbcdn.net`), capped at 15 MB, and rejected unless the bytes really are an image. |
 | Huge downloads | Videos over 10 minutes are rejected before download when the length is known, and checked again after; the 720p-class version is preferred. |
 | Browser cookies | Only used if the user agrees (`--cookies-from-browser`); yt-dlp keeps them in memory and doesn't write them to disk. |
 

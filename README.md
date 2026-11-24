@@ -1,8 +1,8 @@
 # Reel Skill Scout
 
-**Stop searching for Claude skills one by one.** Paste a link to an Instagram reel about Claude, and Claude watches it, finds every skill, plugin and MCP server it recommends, verifies the GitHub repos, and tells you which ones are actually worth installing for *your* workflow.
+**Stop searching for Claude skills one by one.** Paste a link to an Instagram reel or post about Claude, and Claude watches or reads it, finds every skill, plugin and MCP server it recommends, verifies the GitHub repos, and tells you which ones are actually worth installing for *your* workflow.
 
-A [Claude Code](https://claude.com/claude-code) skill for **Instagram reels**. Everything runs on your own computer.
+A [Claude Code](https://claude.com/claude-code) skill for **Instagram**: reels, photo posts and carousels. Everything runs on your own computer.
 
 ```
 you:    https://www.instagram.com/reel/DgBVPFEOaA3/
@@ -20,7 +20,7 @@ claude: This reel counts down the 10 fastest-growing Claude repos on GitHub this
 
 ## What it does
 
-1. **Watches the reel.** Downloads it, pulls frames (read as images) and a local speech transcript, and reads the caption.
+1. **Watches the reel or reads the post.** Downloads it, pulls video frames (read as images), every carousel/photo slide at full size, a local speech transcript, and the caption.
 2. **Extracts every recommendation:** skills, plugins, MCP servers, connectors, slash commands, CLAUDE.md tips, prompts.
 3. **Tracks each one down:** finds the real GitHub repo (often shown on screen even when the creator says "comment for the link"), checks it exists, and pulls live stars, last update and license.
 4. **Rates it for you:** High / Medium / Low / Already covered, based on what you use Claude for (asked once, then remembered).
@@ -64,19 +64,28 @@ Claude also runs this check itself and will offer to install anything missing.
 
 ## Use
 
-Just paste a reel link. No special command needed:
+Just paste a reel or post link. No special command needed:
 
 > https://www.instagram.com/reel/…
+
+> https://www.instagram.com/p/… (a carousel of skill screenshots)
 
 > what skills is this guy recommending? https://www.instagram.com/reel/…
 
 > here are 3 reels, which of these tools should I actually install? …
 
-Accepted links: `instagram.com/reel/…`, `/reels/…`, `/p/…` and `/tv/…`. Only **public** reels work without logging in. Photo/carousel posts have no video, so Claude will ask for screenshots instead. **Instagram only:** links from other sites are rejected.
+| Post type | Supported |
+|---|---|
+| Reels (`/reel/`, `/reels/`) | ✅ Tested |
+| Carousels (`/p/`): photo slides | ✅ Tested |
+| Carousels with video slides | Supported, not yet tested on a real post (each video slide gets its own frames and transcript) |
+| Single photo or video posts (`/p/`, `/tv/`) | Supported, not yet tested on a real post |
+
+Only **public** posts work without logging in. The caption is always saved first, even if the rest of a post can't be downloaded. **Instagram only:** links from other sites are rejected.
 
 ## Token cost
 
-Roughly **15–20k tokens per reel** (2–3 minutes long): ~3 contact-sheet images, a few full-size frames where text is small, the transcript, and the GitHub lookups. Most of the cost is images; the script packs 16 frames per sheet to keep it low.
+Roughly **15–20k tokens per reel** (2–3 minutes long): ~3 contact-sheet images, a few full-size frames where text is small, the transcript, and the GitHub lookups. Most of the cost is images; the script packs 16 frames per sheet to keep it low. A carousel costs about **1.5–2k tokens per slide** (a 5-slide post is ~10k).
 
 ## Privacy and responsible use
 
@@ -91,7 +100,8 @@ Roughly **15–20k tokens per reel** (2–3 minutes long): ~3 contact-sheet imag
 |---|---|
 | `DOWNLOAD FAILED` | `python -m pip install -U yt-dlp`. Instagram changes constantly, and a newer yt-dlp usually fixes it |
 | "login required" / rate limited | Wait a while, or let Claude retry with `--cookies-from-browser chrome` |
-| "Only Instagram reels are supported" | Use the reel's full `instagram.com/reel/…` link (Share → Copy link) |
+| "Only Instagram is supported" | Use the full `instagram.com/reel/…` or `instagram.com/p/…` link (Share → Copy link) |
+| `note: slide N …` | Part of a carousel was skipped; the report mentions it |
 | `Python was not found` (Windows) | That's the Microsoft Store placeholder; install real Python (see Install) |
 | Transcript has wrong names | Normal for Whisper. Claude cross-checks names against on-screen text. For accents/noise, ask for `--whisper-model medium` |
 | First run is slow | One-time ~500 MB Whisper model download |
@@ -103,7 +113,7 @@ Roughly **15–20k tokens per reel** (2–3 minutes long): ~3 contact-sheet imag
 skills/reel-skill-scout/
 ├── SKILL.md              instructions Claude follows
 └── scripts/
-    ├── reel_extract.py   yt-dlp download → ffmpeg frames + 4x4 contact sheets → faster-whisper transcript
+    ├── reel_extract.py   yt-dlp download → photo slides + ffmpeg frames/4x4 contact sheets → faster-whisper transcript
     └── check_repos.py    verifies owner/repo via the GitHub API (stars, last push, license, archived)
 ```
 

@@ -59,6 +59,12 @@ def fetch(owner, repo):
 
 
 def main(args):
+    # repo descriptions are full of emoji; don't crash on legacy console code pages (cp874, cp1252...)
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
     if not args:
         print(__doc__)
         return 1

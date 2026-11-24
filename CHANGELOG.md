@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 (2026-11-24)
+
+- **Photo posts and carousels.** Every slide is read: photo slides are saved at full size (`slides/`), and each video slide gets its own frames, contact sheets and transcript section. Previously only the first video was used and photo posts failed.
+- **The caption is always saved**, written before anything else, so it survives a failed download.
+- **No more crashes on emoji** in captions or repo descriptions on Windows consoles with legacy code pages (e.g. cp874, cp1252).
+- More reliable downloads: automatic retries and timeouts; a failed download now reports "download failed" (exit 2) instead of "nothing to read".
+- Reruns into the same folder also clear partial `.part` downloads and old slide folders.
+
 ## 1.0.0 (2026-11-24)
 
 First release.
