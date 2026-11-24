@@ -22,6 +22,16 @@ The main risk is **untrusted content**. Anyone can post a reel or create a GitHu
 | Huge downloads | Videos over 10 minutes are rejected before download when the length is known, and checked again after; the 720p-class version is preferred. |
 | Browser cookies | Only used if the user agrees (`--cookies-from-browser`); yt-dlp keeps them in memory and doesn't write them to disk. |
 
+### Group chat mode (reel-group-scout)
+
+| Risk | Protection |
+|---|---|
+| A group member or a shared post tells Claude to message someone, install something or change settings | Everything in the chat is data. The skill only reads the one group in the user's settings, opens Instagram post links, writes to one Google Doc, and posts at most one fixed message in that group. It never opens other chats, likes, follows or comments. |
+| Messages sent in the user's name | The skill expects a separate bot account and checks that it is the signed-in account before sending. It sends only after the user's go-ahead for that run, and never from a scheduled run. |
+| Passwords | Claude never types or stores Instagram passwords. The user signs the bot in through the browser pane. |
+| Unattended scheduled runs | A scheduled run has nobody approving each step, so it is limited to reading the group and adding to the doc. It sends nothing to the group. |
+| Poisoned text in the shared doc | The doc holds only Claude's own short summaries and verified repo links, never copied captions or README text, and never instructions for readers to run. |
+
 All subprocess calls use argument lists (no shell), and the URL is passed to yt-dlp's Python API, not a command line, so there's no command or option injection.
 
 ## Out of scope

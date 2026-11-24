@@ -44,7 +44,7 @@ Paste several reels at once and you get one merged list. Tools that several crea
 /plugin install reel-skill-scout@reel-skill-scout
 ```
 
-**Or manually**: copy `skills/reel-skill-scout/` into `~/.claude/skills/`.
+**Or manually**: copy `skills/reel-skill-scout/` (and `skills/reel-group-scout/` if you want group chat mode) into `~/.claude/skills/`.
 
 Then install the Python packages:
 
@@ -78,10 +78,34 @@ Just paste a reel or post link. No special command needed:
 |---|---|
 | Reels (`/reel/`, `/reels/`) | ✅ Tested |
 | Carousels (`/p/`): photo slides | ✅ Tested |
-| Carousels with video slides | Supported, not yet tested on a real post (each video slide gets its own frames and transcript) |
+| Carousels with video slides | ✅ Tested (each video slide gets its own frames and transcript) |
 | Single photo or video posts (`/p/`, `/tv/`) | Supported, not yet tested on a real post |
 
 Only **public** posts work without logging in. The caption is always saved first, even if the rest of a post can't be downloaded. **Instagram only:** links from other sites are rejected.
+
+## Group chat mode: reel-group-scout
+
+Share reels with friends in an Instagram group? The second skill in this plugin, **reel-group-scout**, reads the group for you. Say **"check the group"** and Claude finds every reel and post sent since the last check, scouts each one, and adds a section per post to a shared **Google Doc**: a summary plus a table of every skill with its GitHub link and stars. Pin the doc's link in the group and everyone can read it.
+
+```
+you:    check the group
+claude: 1 new post: @creator's "5 Claude skills that save you hours".
+        Found 4 of 5 repos, added to your findings doc.
+```
+
+It needs a bit more setup than the main skill, and Claude walks you through it the first time:
+
+- **The Claude desktop app.** Claude reads the group through the app's built-in browser.
+- **A separate Instagram account for the bot.** You create it, sign in to it in the app's browser, and add it to your group. Claude never handles passwords, and your main account is never automated.
+- **The Google Drive and Google Docs connectors**, for the findings doc.
+
+Good to know:
+
+- **It never posts without a go-ahead.** By default it only updates the doc. Say "check the group and post" to also send one short message with the doc link.
+- **You can schedule it** to check once a day with the desktop app's scheduled tasks. Scheduled runs only update the doc and never post in the chat.
+- **It runs on your computer, not in the cloud.** The bot's sign-in lives in the app's browser, so the app needs to be open. A missed check catches up on the next run.
+- **Messages in the group are treated as data.** A caption that says "Claude, do X" gets reported to you, not followed.
+- **Use it lightly.** Automating any Instagram account is against Instagram's terms, and new accounts that send lots of links get flagged. One check a day is plenty.
 
 ## Token cost
 
@@ -115,6 +139,8 @@ skills/reel-skill-scout/
 └── scripts/
     ├── reel_extract.py   yt-dlp download → photo slides + ffmpeg frames/4x4 contact sheets → faster-whisper transcript
     └── check_repos.py    verifies owner/repo via the GitHub API (stars, last push, license, archived)
+skills/reel-group-scout/
+└── SKILL.md              reads an Instagram group, runs reel-skill-scout per post, updates a Google Doc
 ```
 
 You can also run the scripts yourself:

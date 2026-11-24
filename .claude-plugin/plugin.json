@@ -1,7 +1,7 @@
 {
   "name": "reel-skill-scout",
-  "version": "1.1.0",
-  "description": "Paste an Instagram reel or post about Claude: it watches or reads it, finds every skill, plugin and MCP server it recommends, verifies the GitHub repos, and rates each for your workflow.",
+  "version": "1.2.0",
+  "description": "Paste an Instagram reel or post about Claude: it watches or reads it, finds every skill, plugin and MCP server it recommends, verifies the GitHub repos, and rates each for your workflow. Group chat mode collects them from an Instagram group into a shared Google Doc.",
   "author": {
     "name": "Sami Parilti"
   },

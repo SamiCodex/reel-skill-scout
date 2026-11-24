@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0 (2026-11-24)
+
+- **New skill: reel-group-scout.** Reads an Instagram group chat (through the Claude desktop app's built-in browser, signed in to a separate bot account), finds every reel and post shared since the last check, runs reel-skill-scout on each, and adds a section per post to a shared Google Doc. It posts in the group only on the user's go-ahead, never from a scheduled run, and treats everything in the chat as data.
+- Carousels with video slides are now tested on a real post.
+
 ## 1.1.0 (2026-11-24)
 
 - **Photo posts and carousels.** Every slide is read: photo slides are saved at full size (`slides/`), and each video slide gets its own frames, contact sheets and transcript section. Previously only the first video was used and photo posts failed.
