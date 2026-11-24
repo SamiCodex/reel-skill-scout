@@ -1,0 +1,12 @@
+{
+  "name": "reel-skill-scout",
+  "version": "1.0.0",
+  "description": "Paste an Instagram reel about Claude: it watches the reel, finds every skill, plugin and MCP server it recommends, verifies the GitHub repos, and rates each for your workflow.",
+  "author": {
+    "name": "Sami Parilti"
+  },
+  "homepage": "https://github.com/SamiCodex/reel-skill-scout",
+  "repository": "https://github.com/SamiCodex/reel-skill-scout",
+  "license": "MIT",
+  "keywords": ["claude", "skills", "instagram", "reels", "mcp", "plugins", "discovery"]
+}

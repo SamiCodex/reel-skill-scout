@@ -1,0 +1,14 @@
+{
+  "name": "reel-skill-scout",
+  "owner": {
+    "name": "Sami Parilti"
+  },
+  "plugins": [
+    {
+      "name": "reel-skill-scout",
+      "source": "./",
+      "description": "Watch Instagram reels about Claude, find every skill/plugin/MCP they recommend, verify the GitHub repos, and rate each for your workflow.",
+      "version": "1.0.0"
+    }
+  ]
+}

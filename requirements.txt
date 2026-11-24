@@ -1,0 +1,5 @@
+# Python 3.9+
+yt-dlp>=2025.1.1        # video download; update often: sites change and break older versions
+imageio-ffmpeg>=0.5.1   # bundles an ffmpeg binary, so no separate ffmpeg install is needed
+faster-whisper>=1.1.0   # local speech-to-text
+numpy>=1.24

@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Downloaded media and extraction output - other creators' content, never commit
+*.mp4
+*.mkv
+*.webm
+*.mov
+*.part
+*.ytdl
+frames/
+sheets/
+info.json
+info.md
+transcript.md
+frames.md
+*-workspace/
+output/
+out/
+
+# Personal data
+catalog.md
+cookies.txt
+*.cookies
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
